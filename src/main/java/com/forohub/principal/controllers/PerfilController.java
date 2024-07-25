@@ -34,11 +34,8 @@ public class PerfilController {
         Usuario usuario = this.usuarioService.traerUsuariosPorID(perfil.usuario_id());
         Perfil perfil2 = new Perfil(perfil, usuario);
         usuario.agregarPerfil(perfil2, usuario);
-        System.out.println(usuario);
-        System.out.println(usuario.getPerfiles());
-        this.usuarioService.crearUsuario(usuario);
         perfil2.setUsuario(usuario);
-        return this.perfilService.crearPerfil(perfil2);
+        return usuarioService.crearUsuario(usuario);
     }
 
 }

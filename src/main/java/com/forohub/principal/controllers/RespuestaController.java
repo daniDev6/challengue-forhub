@@ -26,12 +26,12 @@ public class RespuestaController {
     public RespuestaController() {
     }
 
-    @GetMapping({"traer"})
+    @GetMapping("traer")
     public List<DtoRespuesta> traerRespuestas() {
-        return this.respuestaService.traerRespuestas();
+        return respuestaService.traerRespuestas();
     }
 
-    @PostMapping({"crear"})
+    @PostMapping("crear")
     public String crearRespuesta(@RequestBody DtoRespuesta dtoRespuesta) {
         Usuario usuario = this.usuarioService.traerUsuariosPorID(dtoRespuesta.usuario_id());
         Topico topico = this.topicoService.traerTopicoPorID(dtoRespuesta.topico_id());

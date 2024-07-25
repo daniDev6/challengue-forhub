@@ -14,28 +14,25 @@ public class RespuestaService {
     @Autowired
     IRespuestaRepository respuestaRepository;
 
-    public RespuestaService() {
+    public List<DtoRespuesta> traerRespuestas(){
+        List<Respuesta> listaRespuestas=respuestaRepository.findAll();
+        return listaRespuestas.stream().map(e->e.toDto()).collect(Collectors.toList());
     }
-
-    public List<DtoRespuesta> traerRespuestas() {
-        List<Respuesta> listaRespuestas = this.respuestaRepository.findAll();
-        return listaRespuestas.stream().map(Respuesta::toDto).collect(Collectors.toList());
+    public DtoRespuesta traerRespuestasPorID(Long id){
+        Optional<Respuesta> respuesta=respuestaRepository.findById(id);
+        respuesta.orElseThrow(()->new RuntimeException("no se encontraron resultados"));
+        return respuesta.get().toDto();
     }
-
-    public DtoRespuesta traerRespuestasPorID(Long id) {
-        Optional<Respuesta> respuesta = this.respuestaRepository.findById(id);
-        respuesta.orElseThrow(() -> {
-            return new RuntimeException("no se encontraron resultados");
-        });
-        return (respuesta.get()).toDto();
-    }
-
-    public String crearRespuesta(Respuesta respuesta) {
-        try {
-            this.respuestaRepository.save(respuesta);
-            return "Se creo con exito la respuesta";
-        } catch (Exception var3) {
+    public String crearRespuesta(Respuesta respuesta){
+        try{
+            respuestaRepository.save(respuesta);
+        }catch (Exception e){
             throw new RuntimeException("error al crear una respuesta");
         }
+        return "Se creo con exito la respuesta";
     }
+
+
+
+
 }

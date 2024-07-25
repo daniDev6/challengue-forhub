@@ -26,7 +26,7 @@ public class UsuarioController {
     }
 
     @GetMapping("traer/{id}")
-    public DtoUsuario traerUsuarios(@PathVariable Long id) {
+    public DtoUsuario traerUsuariosPorID(@PathVariable Long id) {
         return usuarioService.traerUsuariosPorID(id).toDto();
     }
 

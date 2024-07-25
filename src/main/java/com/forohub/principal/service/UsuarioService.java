@@ -18,37 +18,39 @@ public class UsuarioService {
     public UsuarioService(IUsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-
     @Transactional
-    public List<DtoUsuario> traerUsuarios() {
-        List<Usuario> usuarios = this.usuarioRepository.findAll();
-        List<DtoUsuario> usuariosDto = (List)usuarios.stream().map((e) -> {
-            return e.toDto();
-        }).collect(Collectors.toList());
+    public List<DtoUsuario> traerUsuarios(){
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<DtoUsuario> usuariosDto = usuarios.stream()
+                .map(e->e.toDto())
+                .collect(Collectors.toList());
         return usuariosDto;
     }
-
     @Transactional
-    public String crearUsuario(Usuario usuario) {
-        try {
-            this.usuarioRepository.save(usuario);
-            return "se creo correctamente";
-        } catch (Exception var3) {
-            throw new RuntimeException();
+    public String crearUsuario(Usuario usuario){
+        try{
+            usuarioRepository.save(usuario);
+        }catch (Exception e){
+            throw  new RuntimeException();
         }
+        return "se creo correctamente";
     }
 
     @Transactional
     public Usuario traerUsuariosPorID(Long id) {
+        Optional<Usuario> usuario;
         Usuario usuario1 = new Usuario();
-
-        Optional usuario;
-        try {
-            usuario = usuarioRepository.findById(id);
-        } catch (Exception var5) {
+        try{
+            usuario=usuarioRepository.findById(id);
+        }catch (Exception e){
             throw new RuntimeException();
         }
+        if(usuario.isPresent()){
+            return usuario.get();
+        }else{
+            return usuario1;
+        }
 
-        return usuario.isPresent() ? usuario.get() : usuario1;
+
     }
 }

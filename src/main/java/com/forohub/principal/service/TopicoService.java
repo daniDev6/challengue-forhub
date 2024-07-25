@@ -17,37 +17,30 @@ import java.util.stream.Collectors;
 public class TopicoService {
     @Autowired
     IUsuarioRepository usuarioRepository;
+
     @Autowired
     ICursoRepository cursoRepository;
     @Autowired
     ITopicoRepository topicoRepository;
 
-    public TopicoService() {
-    }
 
-    public List<DtoTopico> traerTopicos() {
-        List<Topico> topicos = this.topicoRepository.findAll();
-        return topicos.stream().map(Topico::toDto).collect(Collectors.toList());
+    public List<DtoTopico> traerTopicos(){
+        List<Topico> topicos = topicoRepository.findAll();
+        return topicos.stream().map(e->e.toDto()).collect(Collectors.toList());
     }
-
     @Transactional
-    public String crearTopico(Topico topico) {
-        try {
-            this.topicoRepository.save(topico);
-            return "Creado con exito";
-        } catch (Exception var3) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Transactional
-    public Topico traerPorID(Long id) {
-        Optional<Topico> topico;
+    public String crearTopico(Topico topico){
         try{
-            topico = topicoRepository.findById(id);
+            topicoRepository.save(topico);
         }catch (Exception e){
             throw new RuntimeException();
         }
-        return topico.isPresent()?topico.get():new Topico();
+        return "Creado con exito";
+    }
+
+
+    public Topico traerTopicoPorID(Long topico_id) {
+        Topico topico = topicoRepository.getReferenceById(topico_id);
+        return topico;
     }
 }
