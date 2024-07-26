@@ -15,18 +15,23 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class TopicoService {
-    @Autowired
-    IUsuarioRepository usuarioRepository;
 
-    @Autowired
-    ICursoRepository cursoRepository;
-    @Autowired
-    ITopicoRepository topicoRepository;
+    private final IUsuarioRepository usuarioRepository;
 
+    private final ICursoRepository cursoRepository;
+
+    private final ITopicoRepository topicoRepository;
+    private final ServicioGenerales servicioGenerales;
+
+    public TopicoService(ServicioGenerales servicioGenerales, IUsuarioRepository usuarioRepository, ICursoRepository cursoRepository, ITopicoRepository topicoRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.cursoRepository = cursoRepository;
+        this.topicoRepository = topicoRepository;
+        this.servicioGenerales = servicioGenerales;
+    }
 
     public List<DtoTopico> traerTopicos(){
-        List<Topico> topicos = topicoRepository.findAll();
-        return topicos.stream().map(e->e.toDto()).collect(Collectors.toList());
+        return transformarDTO(topicoRepository.findAll());
     }
     @Transactional
     public String crearTopico(Topico topico){
@@ -39,8 +44,42 @@ public class TopicoService {
     }
 
 
-    public Topico traerTopicoPorID(Long topico_id) {
-        Topico topico = topicoRepository.getReferenceById(topico_id);
-        return topico;
+
+    public Topico traerPorID(Long id) {
+        Optional<Topico> topico = topicoRepository.findById(id);
+        topico.orElseThrow(()->new RuntimeException("No se encontro"));
+        return topico.get();
+    }
+    public DtoTopico traerTopicoPorID(Long id){
+        return transformarDTO(traerPorID(id));
+    }
+
+
+    public DtoTopico transformarDTO(Topico topico){
+        return topico.toDto();
+    }
+    public List<DtoTopico> transformarDTO(List<Topico> topicos){
+        return topicos.stream().map(Topico::toDto).collect(Collectors.toList());
+    }
+
+
+    public String actualizarTopicoPorID(Long id,DtoTopico dtoTopico) {
+       Topico topico = traerPorID(id);
+       //analizamos si los datos nuevos difieren
+        boolean tituloNuevo = servicioGenerales.controlarEstado(dtoTopico.titulo(),topico.getTitulo());
+        boolean statusNuevo = servicioGenerales.controlarEstado(dtoTopico.status(),topico.isStatus());
+        if(tituloNuevo){
+            topico.setTitulo(dtoTopico.titulo());
+        }
+        if(statusNuevo){
+            topico.setStatus(dtoTopico.status());
+        }
+        if(tituloNuevo|statusNuevo){
+            topicoRepository.save(topico);
+            return "Se efectuaron los cambios";
+        }else {
+            return "No se notaron cambios";
+        }
+
     }
 }

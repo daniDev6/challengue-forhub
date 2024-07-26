@@ -33,10 +33,18 @@ public class RespuestaController {
 
     @PostMapping("crear")
     public String crearRespuesta(@RequestBody DtoRespuesta dtoRespuesta) {
-        Usuario usuario = this.usuarioService.traerUsuariosPorID(dtoRespuesta.usuario_id());
-        Topico topico = this.topicoService.traerTopicoPorID(dtoRespuesta.topico_id());
+        Usuario usuario = usuarioService.traerUsuariosPorID(dtoRespuesta.usuario_id());
+        Topico topico = topicoService.traerPorID(dtoRespuesta.topico_id());
         Respuesta respuesta = new Respuesta(dtoRespuesta, usuario, topico);
         return this.respuestaService.crearRespuesta(respuesta);
+    }
+    @GetMapping("traer/{id}")
+    public DtoRespuesta traerPorID(@RequestBody DtoRespuesta dtoRespuesta, @PathVariable Long id){
+        return respuestaService.traerRespuestasPorID(id);
+    }
+    @PutMapping("actualizar/{id}")
+    public String actualizarPorID(@RequestBody DtoRespuesta dtoRespuesta,@PathVariable Long id){
+        return respuestaService.actualizarPorID(id,dtoRespuesta);
     }
 
 }

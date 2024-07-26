@@ -11,17 +11,29 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class RespuestaService {
+    private final IRespuestaRepository respuestaRepository;
+    private final ServicioGenerales servicioGenerales;
+
     @Autowired
-    IRespuestaRepository respuestaRepository;
+    public RespuestaService(IRespuestaRepository respuestaRepository, ServicioGenerales servicioGenerales) {
+        this.respuestaRepository = respuestaRepository;
+        this.servicioGenerales = servicioGenerales;
+    }
+
+
+
+
 
     public List<DtoRespuesta> traerRespuestas(){
-        List<Respuesta> listaRespuestas=respuestaRepository.findAll();
-        return listaRespuestas.stream().map(e->e.toDto()).collect(Collectors.toList());
+        return transformarDTO(respuestaRepository.findAll());
     }
     public DtoRespuesta traerRespuestasPorID(Long id){
+        return transformarDTO(traerPorID(id));
+    }
+    public Respuesta traerPorID(Long id){
         Optional<Respuesta> respuesta=respuestaRepository.findById(id);
         respuesta.orElseThrow(()->new RuntimeException("no se encontraron resultados"));
-        return respuesta.get().toDto();
+        return respuesta.get();
     }
     public String crearRespuesta(Respuesta respuesta){
         try{
@@ -32,6 +44,36 @@ public class RespuestaService {
         return "Se creo con exito la respuesta";
     }
 
+    public String actualizarPorID(Long id, DtoRespuesta dtoRespuesta) {
+        Respuesta respuesta = traerPorID(id);
+        //evaluamos si los datos son diferentes
+        boolean mensajeNuevo = servicioGenerales.controlarEstado(dtoRespuesta.mensaje(),respuesta.getMensaje());
+        boolean solucionNuevo = servicioGenerales.controlarEstado(dtoRespuesta.solucion(),respuesta.getSolucion());
+        if(mensajeNuevo){
+            respuesta.setMensaje(dtoRespuesta.mensaje());
+        }
+        if(solucionNuevo){
+            respuesta.setSolucion(dtoRespuesta.solucion());
+        }
+        if(mensajeNuevo|solucionNuevo){
+            respuestaRepository.save(respuesta);
+            return "Se efectuaron los cambios";
+        }else {
+            return "Sin cambios";
+        }
+    }
+
+
+
+
+
+
+    public DtoRespuesta transformarDTO(Respuesta respuesta){
+        return respuesta.toDto();
+    }
+    public List<DtoRespuesta> transformarDTO(List<Respuesta> respuestas){
+        return respuestas.stream().map(Respuesta::toDto).collect(Collectors.toList());
+    }
 
 
 

@@ -13,13 +13,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class PerfilService {
+    private final IPerfilRepository perfilRepository;
+    private final ServicioGenerales servicioGenerales;
+
+    public PerfilService(IPerfilRepository perfilRepository, ServicioGenerales servicioGenerales) {
+        this.perfilRepository = perfilRepository;
+        this.servicioGenerales = servicioGenerales;
+    }
+
     @Autowired
-    IPerfilRepository perfilRepository;
+
+
 
     @Transactional
     public List<DtoPerfil> traerPerfiles() {
         List<Perfil> perfiles = perfilRepository.findAll();
-        return perfiles.stream().map(Perfil::toDto).collect(Collectors.toList());
+        return transformarDTO(perfiles);
     }
 
     @Transactional
@@ -32,14 +41,52 @@ public class PerfilService {
         }
     }
     @Transactional
-    public Perfil traerPorID(Long id) {
+    public DtoPerfil traerPorID(Long id) {
         Optional<Perfil> perfil;
         try{
             perfil = perfilRepository.findById(id);
         }catch (Exception e){
             throw new RuntimeException();
         }
-        return perfil.isPresent()?perfil.get():new Perfil();
+        return perfil.isPresent()?transformarDTO(perfil.get()):transformarDTO(new Perfil());
     }
+
+    public DtoPerfil transformarDTO(Perfil perfil){
+        return perfil.toDto();
+    }
+    public List<DtoPerfil> transformarDTO(List<Perfil> perfiles){
+        return perfiles.stream().map(Perfil::toDto).collect(Collectors.toList());
+    }
+
+
+    public String actualizarPorID(Long id,DtoPerfil dtoPerfil) {
+        //exite?
+        Optional<Perfil> perfil = perfilRepository.findById(id);
+        if(perfil.isPresent()){
+            //validamos q los datos no sean lo mismos de los que ya tenia
+            boolean nombreNuevo = servicioGenerales.controlarEstado(dtoPerfil.nombre(),perfil.get().getNombre());
+
+            if(nombreNuevo){
+                perfil.get().setNombre(dtoPerfil.nombre());
+                perfilRepository.save(perfil.get());
+                return "Se actualizo con exito";
+            }else {
+                return "No se encontraron cambios";
+            }
+        }else {
+            return "No existe el perfil que se desea actuializar";
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 }

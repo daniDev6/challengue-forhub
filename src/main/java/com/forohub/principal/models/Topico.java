@@ -42,6 +42,7 @@ public class Topico {
     }
 
 
+
     public void setRespuesta(Respuesta respuesta) {
         this.respuestas.add(respuesta);
         respuesta.setTopico(this);

@@ -2,6 +2,8 @@ package com.forohub.principal.models;
 
 import com.forohub.principal.dto.DtoCurso;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,7 +22,11 @@ public class Curso {
             strategy = GenerationType.IDENTITY
     )
     private Long id;
+    @NotBlank
+    @Size(min = 5, max = 20 , message = "No puede estar en blanco")
     private String nombre;
+    @NotBlank
+    @Size(min = 5, max = 20 , message = "No puede estar en blanco")
     private String categoria;
     @OneToMany(
             mappedBy = "curso",
@@ -42,5 +48,4 @@ public class Curso {
     public DtoCurso toDto() {
         return new DtoCurso(this.nombre, this.categoria, this.topicos.stream().map(Topico::toDto).collect(Collectors.toList()));
     }
-
 }

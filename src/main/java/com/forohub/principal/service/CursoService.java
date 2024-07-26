@@ -12,17 +12,21 @@ import java.util.stream.Collectors;
 
 @Service
 public class CursoService {
-    @Autowired
-    ICursoRepository cursoRepository;
+    private final ICursoRepository cursoRepository;
+    private final ServicioGenerales servicioGenerales;
 
-    public CursoService() {
+
+    @Autowired
+    public CursoService(ICursoRepository cursoRepository, ServicioGenerales servicioGenerales) {
+        this.cursoRepository=cursoRepository;
+        this.servicioGenerales=servicioGenerales;
     }
 
     public String crearCurso(Curso curso) {
         try {
-            this.cursoRepository.save(curso);
+            cursoRepository.save(curso);
             return "Se creo correctamente";
-        } catch (Exception var3) {
+        } catch (Exception ex) {
             throw new RuntimeException();
         }
     }
@@ -54,10 +58,21 @@ public class CursoService {
 
     public DtoCurso actualizarCurso(DtoCurso cursoDto,Long id) {
         Curso curso = traerPorCursoPorID(id);
-        if(curso==null){
-            throw new RuntimeException();
-        }else{
-            return transformarDTO(new Curso());
+        if(curso==null){throw new RuntimeException("no existe tal Curso con el id" + id);}
+             //Evaluamos si vienen cargados con datos y si son nuevos o no
+        boolean nombreValidar = servicioGenerales.controlarEstado(cursoDto.nombre(), curso.getNombre());
+        boolean categoriaValidar = servicioGenerales.controlarEstado(cursoDto.categoria(),curso.getCategoria());
+        if(nombreValidar){
+            curso.setNombre(cursoDto.nombre());
         }
+        if(categoriaValidar){
+            curso.setCategoria(cursoDto.categoria());
+        }
+        if(nombreValidar|categoriaValidar){cursoRepository.save(curso);}
+        return transformarDTO(curso);
     }
+
+
+
+
 }

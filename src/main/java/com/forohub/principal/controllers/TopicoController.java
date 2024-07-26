@@ -1,5 +1,6 @@
 package com.forohub.principal.controllers;
 
+import com.forohub.principal.dto.DtoRespuesta;
 import com.forohub.principal.dto.DtoTopico;
 import com.forohub.principal.models.Curso;
 import com.forohub.principal.models.Topico;
@@ -8,10 +9,9 @@ import com.forohub.principal.service.CursoService;
 import com.forohub.principal.service.TopicoService;
 import com.forohub.principal.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("topico/")
@@ -31,8 +31,19 @@ public class TopicoController {
         Topico topico = new Topico(dtoTopico, user, curso);
         return this.topicoService.crearTopico(topico);
     }
+    @GetMapping("traer/{id}")
+    public DtoTopico traerTopicoPorID(@PathVariable Long id){
+        return topicoService.traerTopicoPorID(id);
+    }
 
-
+    @GetMapping("traer")
+    public List<DtoTopico> traerTopicos(){
+        return traerTopicos();
+    }
+    @PutMapping("actualizar/{id}")
+    public String actualizarPorID(@RequestBody DtoTopico dtoTopico,@PathVariable Long id){
+        return topicoService.actualizarTopicoPorID(id,dtoTopico);
+    }
 
 
 
