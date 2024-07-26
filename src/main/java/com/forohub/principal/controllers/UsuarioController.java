@@ -12,13 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("usuarios/")
 public class UsuarioController {
-    @Autowired
-    UsuarioService usuarioService;
-    @Autowired
-    IUsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController() {
+    @Autowired
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
+
+
 
     @GetMapping("traer")
     public List<DtoUsuario> traerUsuarios() {
@@ -27,12 +28,27 @@ public class UsuarioController {
 
     @GetMapping("traer/{id}")
     public DtoUsuario traerUsuariosPorID(@PathVariable Long id) {
-        return usuarioService.traerUsuariosPorID(id).toDto();
+        return usuarioService.traerPorID(id);
     }
 
     @PostMapping("crear")
     public String crearUsuario(@RequestBody DtoUsuario usuario) {
-        Usuario user = new Usuario(usuario);
-        return usuarioService.crearUsuario(user);
+        return usuarioService.crearUsuario(usuario);
     }
+
+    @PutMapping("actualizar/{id}")
+    public DtoUsuario actualizarPorID(@PathVariable Long id,@RequestBody DtoUsuario dtoUsuario){
+        return usuarioService.actualizarPorID(id, dtoUsuario);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
