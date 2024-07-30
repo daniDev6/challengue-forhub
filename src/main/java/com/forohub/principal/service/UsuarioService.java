@@ -1,9 +1,13 @@
 package com.forohub.principal.service;
 
 import com.forohub.principal.dto.DtoUsuario;
+import com.forohub.principal.models.AuthenticationRequest;
+import com.forohub.principal.models.AuthenticationResponse;
 import com.forohub.principal.models.Usuario;
 import com.forohub.principal.repository.IUsuarioRepository;
+import com.forohub.principal.security.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +18,14 @@ import java.util.stream.Collectors;
 public class UsuarioService {
     private final IUsuarioRepository usuarioRepository;
     private final ServicioGenerales servicioGenerales;
+    private PasswordEncoder passwordEncoder;
+    private AuthenticationService authenticationService;
     @Autowired
-    public UsuarioService(IUsuarioRepository usuarioRepository, ServicioGenerales servicioGenerales) {
+    public UsuarioService(IUsuarioRepository usuarioRepository, ServicioGenerales servicioGenerales, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.usuarioRepository = usuarioRepository;
         this.servicioGenerales = servicioGenerales;
+        this.passwordEncoder=passwordEncoder;
+        this.authenticationService=authenticationService;
     }
 
     @Transactional
@@ -36,6 +44,8 @@ public class UsuarioService {
     @Transactional
     public String crearUsuario(DtoUsuario usuario){
         Usuario usuario1 = new Usuario(usuario);
+        usuario1.setPassword(passwordEncoder.encode(usuario.password()));
+        crearUsuario(usuario1);
         return "Creado con exito";
     }
     @Transactional
@@ -61,7 +71,7 @@ public class UsuarioService {
         Usuario usuario = traerUsuariosPorID(id);
         boolean nombreNuevo = servicioGenerales.controlarEstado(dtoUsuario.nombre(), usuario.getNombre());
         boolean correoNuevo = servicioGenerales.controlarEstado(dtoUsuario.correoElectronico(), usuario.getCorreoElectronico());
-        boolean contrasenaNuevo = servicioGenerales.controlarEstado(dtoUsuario.contrasena(), usuario.getContrasena());
+        boolean contrasenaNuevo = servicioGenerales.controlarEstado(dtoUsuario.password(), usuario.getPassword());
         if(nombreNuevo){
             usuario.setNombre(dtoUsuario.nombre());
         }
@@ -69,7 +79,7 @@ public class UsuarioService {
             usuario.setCorreoElectronico(dtoUsuario.correoElectronico());
         }
         if(contrasenaNuevo){
-            usuario.setContrasena(dtoUsuario.contrasena());
+            usuario.setPassword(dtoUsuario.password());
         }
         if(contrasenaNuevo|nombreNuevo|correoNuevo){
             usuarioRepository.save(usuario);
@@ -90,11 +100,22 @@ public class UsuarioService {
     }
 
 
+    public AuthenticationResponse authenticarUsuario(AuthenticationRequest authenticationRequest) {
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println("Soy login");
+        System.out.println(authenticationService.login(authenticationRequest));
+        return authenticationService.login(authenticationRequest);
 
 
 
 
-
-
-
+    }
 }
