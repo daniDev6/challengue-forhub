@@ -1,6 +1,7 @@
 package com.forohub.principal.models;
 
-import com.forohub.principal.dto.DtoUsuario;
+import com.forohub.principal.dto.request.DtoUsuario;
+import com.forohub.principal.dto.response.DtoUsuarioResponse;
 import com.forohub.principal.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -47,6 +48,14 @@ public class Usuario implements UserDetails {
         perfil.setUsuario(this);
     }
 
+    public Usuario(String nombre, String username, String correoElectronico, String password,Role role) {
+        this.nombre = nombre;
+        this.username = username;
+        this.correoElectronico = correoElectronico;
+        this.password = password;
+        this.role=role;
+    }
+
     public List<Perfil> traerPerfilesUsuario(Usuario usuario) {
         return usuario.perfiles == null ? new ArrayList() : usuario.perfiles;
     }
@@ -68,9 +77,14 @@ public class Usuario implements UserDetails {
         this.correoElectronico = dtoUsuario.correoElectronico();
         this.password = dtoUsuario.password();
     }
-
-    public DtoUsuario toDto() {
-        return new DtoUsuario(this.nombre, this.correoElectronico, this.password, (List)this.respuestas.stream().map(Respuesta::toDto).collect(Collectors.toList()), (List)this.topicos.stream().map(Topico::toDto).collect(Collectors.toList()), (List)this.perfiles.stream().map(Perfil::toDto).collect(Collectors.toList()),this.role,this.username);
+    public Usuario(DtoUsuarioResponse dtoUsuarioResponse){
+        this.nombre = dtoUsuarioResponse.nombre();
+        this.username=dtoUsuarioResponse.username();
+        this.role=dtoUsuarioResponse.role();
+        this.correoElectronico = dtoUsuarioResponse.correoElectronico();
+    }
+    public DtoUsuarioResponse toDto() {
+        return new DtoUsuarioResponse(this.nombre, this.correoElectronico, (List)this.respuestas.stream().map(Respuesta::toDto).collect(Collectors.toList()), (List)this.topicos.stream().map(Topico::toDto).collect(Collectors.toList()), (List)this.perfiles.stream().map(Perfil::toDto).collect(Collectors.toList()),this.role,this.username);
     }
 
     @Override

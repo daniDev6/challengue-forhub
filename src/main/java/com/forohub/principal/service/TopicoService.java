@@ -1,12 +1,11 @@
 package com.forohub.principal.service;
 
-import com.forohub.principal.dto.DtoTopico;
-import com.forohub.principal.models.Perfil;
+import com.forohub.principal.dto.request.DtoTopico;
+import com.forohub.principal.dto.response.DtoTopicoResponse;
 import com.forohub.principal.models.Topico;
 import com.forohub.principal.repository.ICursoRepository;
 import com.forohub.principal.repository.ITopicoRepository;
 import com.forohub.principal.repository.IUsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class TopicoService {
         this.servicioGenerales = servicioGenerales;
     }
 
-    public List<DtoTopico> traerTopicos(){
+    public List<DtoTopicoResponse> traerTopicos(){
         return transformarDTO(topicoRepository.findAll());
     }
     @Transactional
@@ -50,15 +49,15 @@ public class TopicoService {
         topico.orElseThrow(()->new RuntimeException("No se encontro"));
         return topico.get();
     }
-    public DtoTopico traerTopicoPorID(Long id){
+    public DtoTopicoResponse traerTopicoPorID(Long id){
         return transformarDTO(traerPorID(id));
     }
 
 
-    public DtoTopico transformarDTO(Topico topico){
+    public DtoTopicoResponse transformarDTO(Topico topico){
         return topico.toDto();
     }
-    public List<DtoTopico> transformarDTO(List<Topico> topicos){
+    public List<DtoTopicoResponse> transformarDTO(List<Topico> topicos){
         return topicos.stream().map(Topico::toDto).collect(Collectors.toList());
     }
 
@@ -81,5 +80,15 @@ public class TopicoService {
             return "No se notaron cambios";
         }
 
+    }
+
+    public String eliminarPerfil(Long id) {
+        try{
+            topicoRepository.deleteById(id);
+            return "Se borro correctamente";
+        }catch (Exception e){
+            new RuntimeException(e);
+            return "Error al intentar borrar";
+        }
     }
 }

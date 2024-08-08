@@ -1,6 +1,7 @@
 package com.forohub.principal.models;
 
-import com.forohub.principal.dto.DtoTopico;
+import com.forohub.principal.dto.request.DtoTopico;
+import com.forohub.principal.dto.response.DtoTopicoResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,7 +49,7 @@ public class Topico {
         respuesta.setTopico(this);
     }
 
-    public DtoTopico toDto() {
-        return new DtoTopico(this.titulo, this.fechaCreacion, this.status, this.usuario.getId(), this.curso.getId(), this.respuestas.stream().map(Respuesta::toDto).collect(Collectors.toList()));
+    public DtoTopicoResponse toDto() {
+        return new DtoTopicoResponse(this.titulo, this.fechaCreacion, this.status, this.usuario.getId(), this.curso.getId(), this.respuestas.stream().map(Respuesta::toDto).collect(Collectors.toList()));
     }
 }

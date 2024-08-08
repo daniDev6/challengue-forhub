@@ -1,6 +1,6 @@
 package com.forohub.principal.service;
 
-import com.forohub.principal.dto.DtoRespuesta;
+import com.forohub.principal.dto.request.DtoRespuesta;
 import com.forohub.principal.models.Respuesta;
 import com.forohub.principal.repository.IRespuestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,4 +77,14 @@ public class RespuestaService {
 
 
 
+
+    public String eliminarRespuesta(Long id) {
+        try{
+            respuestaRepository.deleteById(id);
+            return "Se borro correctamente";
+        }catch (Exception e){
+            new RuntimeException(e);
+            return "Error al intentar borrar";
+        }
+    }
 }

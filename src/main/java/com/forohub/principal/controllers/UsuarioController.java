@@ -1,10 +1,10 @@
 package com.forohub.principal.controllers;
 
-import com.forohub.principal.dto.DtoUsuario;
+import com.forohub.principal.dto.request.DtoUsuario;
+import com.forohub.principal.dto.response.DtoUsuarioResponse;
 import com.forohub.principal.models.AuthenticationRequest;
 import com.forohub.principal.models.AuthenticationResponse;
 import com.forohub.principal.models.Usuario;
-import com.forohub.principal.repository.IUsuarioRepository;
 import com.forohub.principal.security.service.AuthenticationService;
 import com.forohub.principal.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -28,20 +28,24 @@ public class UsuarioController {
 
 
     @GetMapping("traer")
-    public List<DtoUsuario> traerUsuarios() {
+    public List<DtoUsuarioResponse> traerUsuarios() {
+        System.out.println("Entrando a traer get");
+
+
         return this.usuarioService.traerUsuarios();
     }
 
     @GetMapping("traer/{id}")
-    public DtoUsuario traerUsuariosPorID(@PathVariable Long id) {
+    public DtoUsuarioResponse traerUsuariosPorID(@PathVariable Long id) {
         return usuarioService.traerPorID(id);
     }
 
     @PostMapping("crear")
     public String crearUsuario(@RequestBody DtoUsuario usuario) {
-        return usuarioService.crearUsuario(usuario);
+        Usuario usuario1=new Usuario(usuario);
+        return usuarioService.crearUsuario(usuario1);
     }
-    @PostMapping("/authenticate")
+    @PostMapping("authenticate")
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody @Valid AuthenticationRequest authenticationRequest){
         AuthenticationResponse jwtDto= authenticationService.login(authenticationRequest);
@@ -49,11 +53,14 @@ public class UsuarioController {
     }
 
     @PutMapping("actualizar/{id}")
-    public DtoUsuario actualizarPorID(@PathVariable Long id,@RequestBody DtoUsuario dtoUsuario){
+    public DtoUsuarioResponse actualizarPorID(@PathVariable Long id,@RequestBody DtoUsuario dtoUsuario){
         return usuarioService.actualizarPorID(id, dtoUsuario);
     }
 
-
+    @DeleteMapping("eliminar/{id}")
+    public String eliminarUsuario(@PathVariable Long id){
+        return usuarioService.eliminarCurso(id);
+    }
 
 
 

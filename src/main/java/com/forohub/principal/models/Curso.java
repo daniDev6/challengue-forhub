@@ -1,6 +1,7 @@
 package com.forohub.principal.models;
 
-import com.forohub.principal.dto.DtoCurso;
+import com.forohub.principal.dto.request.DtoCurso;
+import com.forohub.principal.dto.response.DtoCursoResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -45,7 +46,7 @@ public class Curso {
         this.categoria = dtoCurso.categoria();
     }
 
-    public DtoCurso toDto() {
-        return new DtoCurso(this.nombre, this.categoria, this.topicos.stream().map(Topico::toDto).collect(Collectors.toList()));
+    public DtoCursoResponse toDto() {
+        return new DtoCursoResponse(this.nombre, this.categoria, this.topicos.stream().map(Topico::toDto).collect(Collectors.toList()));
     }
 }

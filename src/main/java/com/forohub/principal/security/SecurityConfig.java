@@ -29,11 +29,9 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig->{
-
                     authConfig.requestMatchers(HttpMethod.POST,"/usuarios/crear").permitAll();
                     authConfig.requestMatchers(HttpMethod.POST,"/usuarios/authenticate").permitAll();
-
-                    authConfig.anyRequest().denyAll();
+                    authConfig.anyRequest().authenticated();
                 });
 
 

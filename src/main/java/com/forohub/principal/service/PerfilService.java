@@ -1,7 +1,6 @@
 package com.forohub.principal.service;
 
-import com.forohub.principal.dto.DtoPerfil;
-import com.forohub.principal.models.Curso;
+import com.forohub.principal.dto.request.DtoPerfil;
 import com.forohub.principal.models.Perfil;
 import com.forohub.principal.repository.IPerfilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +80,13 @@ public class PerfilService {
     }
 
 
-
-
-
-
-
-
-
-
+    public String eliminarPerfil(Long id) {
+        try{
+            perfilRepository.deleteById(id);
+            return "Se borro correctamente";
+        }catch (Exception e){
+            new RuntimeException(e);
+            return "Error al intentar borrar";
+        }
+    }
 }

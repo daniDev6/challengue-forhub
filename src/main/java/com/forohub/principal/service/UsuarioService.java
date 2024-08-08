@@ -1,6 +1,7 @@
 package com.forohub.principal.service;
 
-import com.forohub.principal.dto.DtoUsuario;
+import com.forohub.principal.dto.request.DtoUsuario;
+import com.forohub.principal.dto.response.DtoUsuarioResponse;
 import com.forohub.principal.models.AuthenticationRequest;
 import com.forohub.principal.models.AuthenticationResponse;
 import com.forohub.principal.models.Usuario;
@@ -29,15 +30,16 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<DtoUsuario> traerUsuarios(){
+    public List<DtoUsuarioResponse> traerUsuarios(){
         return transformarDTO(usuarioRepository.findAll());
     }
     @Transactional
     public String crearUsuario(Usuario usuario){
         try{
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             usuarioRepository.save(usuario);
         }catch (Exception e){
-            throw  new RuntimeException();
+            throw  new RuntimeException(e);
         }
         return "se creo correctamente";
     }
@@ -64,10 +66,10 @@ public class UsuarioService {
             return usuario1;
         }
     }
-    public DtoUsuario traerPorID(Long id){
+    public DtoUsuarioResponse traerPorID(Long id){
         return traerUsuariosPorID(id).toDto();
     }
-    public DtoUsuario actualizarPorID(Long id, DtoUsuario dtoUsuario){
+    public DtoUsuarioResponse actualizarPorID(Long id, DtoUsuario dtoUsuario){
         Usuario usuario = traerUsuariosPorID(id);
         boolean nombreNuevo = servicioGenerales.controlarEstado(dtoUsuario.nombre(), usuario.getNombre());
         boolean correoNuevo = servicioGenerales.controlarEstado(dtoUsuario.correoElectronico(), usuario.getCorreoElectronico());
@@ -92,30 +94,30 @@ public class UsuarioService {
 
 
 
-    public List<DtoUsuario> transformarDTO(List<Usuario> usuarios){
+    public List<DtoUsuarioResponse> transformarDTO(List<Usuario> usuarios){
         return usuarios.stream().map(Usuario::toDto).collect(Collectors.toList());
     }
-    public DtoUsuario transformarDTO(Usuario usuario){
+    public DtoUsuarioResponse transformarDTO(Usuario usuario){
         return  usuario.toDto();
     }
 
 
     public AuthenticationResponse authenticarUsuario(AuthenticationRequest authenticationRequest) {
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
-        System.out.println("Soy login");
         System.out.println(authenticationService.login(authenticationRequest));
         return authenticationService.login(authenticationRequest);
 
 
 
 
+    }
+
+    public String eliminarCurso(Long id) {
+        try{
+            usuarioRepository.deleteById(id);
+            return "Se borro correctamente";
+        }catch (Exception e){
+            new RuntimeException(e);
+            return "Error al intentar borrar";
+        }
     }
 }

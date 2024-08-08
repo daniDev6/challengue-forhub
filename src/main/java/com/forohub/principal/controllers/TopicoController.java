@@ -1,7 +1,7 @@
 package com.forohub.principal.controllers;
 
-import com.forohub.principal.dto.DtoRespuesta;
-import com.forohub.principal.dto.DtoTopico;
+import com.forohub.principal.dto.request.DtoTopico;
+import com.forohub.principal.dto.response.DtoTopicoResponse;
 import com.forohub.principal.models.Curso;
 import com.forohub.principal.models.Topico;
 import com.forohub.principal.models.Usuario;
@@ -32,19 +32,22 @@ public class TopicoController {
         return this.topicoService.crearTopico(topico);
     }
     @GetMapping("traer/{id}")
-    public DtoTopico traerTopicoPorID(@PathVariable Long id){
+    public DtoTopicoResponse traerTopicoPorID(@PathVariable Long id){
         return topicoService.traerTopicoPorID(id);
     }
 
     @GetMapping("traer")
-    public List<DtoTopico> traerTopicos(){
-        return traerTopicos();
+    public List<DtoTopicoResponse> traerTopicos(){
+        return topicoService.traerTopicos();
     }
     @PutMapping("actualizar/{id}")
     public String actualizarPorID(@RequestBody DtoTopico dtoTopico,@PathVariable Long id){
         return topicoService.actualizarTopicoPorID(id,dtoTopico);
     }
-
+    @DeleteMapping("eliminar/{id}")
+    public String borrarTopico(@PathVariable Long id){
+        return topicoService.eliminarPerfil(id);
+    }
 
 
 

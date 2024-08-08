@@ -26,31 +26,25 @@ public class AuthenticationService {
     PasswordEncoder passwordEncoder;
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
-        System.out.println("Entrando");
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(),authenticationRequest.getPassword()
         );
-        System.out.println(authenticationRequest.getPassword());
-        System.out.println(authenticationRequest.getUsername());
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
+        System.out.println("Entrando al authenticate");
         authenticationManager.authenticate(authenticationToken);
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
-        System.out.println("Me quede no pase");
+        System.out.println("Saliendo del authenticate");
+        System.out.println("Saliendo del authenticate");
+        System.out.println("Saliendo del authenticate");
+        System.out.println("Saliendo del authenticate");
+        System.out.println("Saliendo del authenticate");
+        System.out.println("Saliendo del authenticate");
         Usuario usuario = usuarioRepository.findByUsername(authenticationRequest.getUsername()).get();
         String jwt = jwtService.generateToken(usuario,generateExtraClaims(usuario));
         return new AuthenticationResponse(jwt);

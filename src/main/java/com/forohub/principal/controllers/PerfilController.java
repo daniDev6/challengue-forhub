@@ -1,10 +1,8 @@
 package com.forohub.principal.controllers;
 
-import com.forohub.principal.dto.DtoCurso;
-import com.forohub.principal.dto.DtoPerfil;
+import com.forohub.principal.dto.request.DtoPerfil;
 import com.forohub.principal.models.Perfil;
 import com.forohub.principal.models.Usuario;
-import com.forohub.principal.repository.IUsuarioRepository;
 import com.forohub.principal.service.PerfilService;
 import com.forohub.principal.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +49,10 @@ public class PerfilController {
         return perfilService.actualizarPorID(id,dtoPerfil);
     }
 
-
+    @DeleteMapping("eliminar/{id}")
+    public String borrarPerfil(@PathVariable Long id){
+        return perfilService.eliminarPerfil(id);
+    }
 
 
 

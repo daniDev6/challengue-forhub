@@ -1,10 +1,9 @@
 package com.forohub.principal.controllers;
 
-import com.forohub.principal.dto.DtoRespuesta;
+import com.forohub.principal.dto.request.DtoRespuesta;
 import com.forohub.principal.models.Respuesta;
 import com.forohub.principal.models.Topico;
 import com.forohub.principal.models.Usuario;
-import com.forohub.principal.repository.IUsuarioRepository;
 import com.forohub.principal.service.RespuestaService;
 import com.forohub.principal.service.TopicoService;
 import com.forohub.principal.service.UsuarioService;
@@ -45,6 +44,10 @@ public class RespuestaController {
     @PutMapping("actualizar/{id}")
     public String actualizarPorID(@RequestBody DtoRespuesta dtoRespuesta,@PathVariable Long id){
         return respuestaService.actualizarPorID(id,dtoRespuesta);
+    }
+    @DeleteMapping("eliminar/{id}")
+    public String borrarRespuesta(@PathVariable Long id){
+        return respuestaService.eliminarRespuesta(id);
     }
 
 }

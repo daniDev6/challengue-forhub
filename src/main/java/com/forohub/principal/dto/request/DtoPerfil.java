@@ -1,4 +1,4 @@
-package com.forohub.principal.dto;
+package com.forohub.principal.dto.request;
 
 public record DtoPerfil(
         String nombre,

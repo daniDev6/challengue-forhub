@@ -1,6 +1,7 @@
 package com.forohub.principal.service;
 
-import com.forohub.principal.dto.DtoCurso;
+import com.forohub.principal.dto.request.DtoCurso;
+import com.forohub.principal.dto.response.DtoCursoResponse;
 import com.forohub.principal.models.Curso;
 import com.forohub.principal.repository.ICursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,15 +49,15 @@ public class CursoService {
         }
         return curso.isPresent()?curso.get():new Curso();
     }
-    public DtoCurso transformarDTO(Curso curso){
+    public DtoCursoResponse transformarDTO(Curso curso){
         return curso.toDto();
     }
-    public List<DtoCurso> transformarDTO(List<Curso> curso){
+    public List<DtoCursoResponse> transformarDTO(List<Curso> curso){
         return curso.stream().map(Curso::toDto).collect(Collectors.toList());
     }
 
 
-    public DtoCurso actualizarCurso(DtoCurso cursoDto,Long id) {
+    public DtoCursoResponse actualizarCurso(DtoCurso cursoDto,Long id) {
         Curso curso = traerPorCursoPorID(id);
         if(curso==null){throw new RuntimeException("no existe tal Curso con el id" + id);}
              //Evaluamos si vienen cargados con datos y si son nuevos o no
@@ -73,6 +74,14 @@ public class CursoService {
     }
 
 
+    public String eliminarCurso(Long id) {
+        try{
+            cursoRepository.deleteById(id);
+            return "Se borro correctamente";
+        }catch (Exception e){
+            new RuntimeException(e);
+            return "Error al intentar borrar";
+        }
 
-
+    }
 }

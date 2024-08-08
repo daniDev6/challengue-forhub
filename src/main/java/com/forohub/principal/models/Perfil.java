@@ -1,6 +1,6 @@
 package com.forohub.principal.models;
 
-import com.forohub.principal.dto.DtoPerfil;
+import com.forohub.principal.dto.request.DtoPerfil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
