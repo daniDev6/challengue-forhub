@@ -1,6 +1,7 @@
 package com.forohub.principal.enums;
 
 public enum Permission {
-    READ_ALL_PRODUCTS,
-    SAVE_ONE_PRODUCT
+    LEER_TODOS,
+    GUARDAR,
+    ACTUALIZAR
 }

@@ -1,5 +1,7 @@
 package com.forohub.principal.security;
 
+import com.forohub.principal.enums.Permission;
+import com.forohub.principal.enums.Role;
 import com.forohub.principal.security.filter.JwtAuthenticateFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +31,10 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authConfig->{
-                    authConfig.requestMatchers(HttpMethod.POST,"/usuarios/crear").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST,"/usuarios/crear").hasAuthority(Permission.GUARDAR.name());
                     authConfig.requestMatchers(HttpMethod.POST,"/usuarios/authenticate").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET,"/usuarios/traer").hasAuthority(Permission.LEER_TODOS.name());
+                    authConfig.requestMatchers(HttpMethod.GET,"/topico/traer").hasRole(Role.ADMINISTRADOR.name());
                     authConfig.anyRequest().authenticated();
                 });
 

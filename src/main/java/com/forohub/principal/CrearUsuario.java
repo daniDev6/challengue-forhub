@@ -5,7 +5,7 @@ import com.forohub.principal.models.Usuario;
 import com.forohub.principal.repository.IUsuarioRepository;
 import com.forohub.principal.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,7 +24,7 @@ public class  CrearUsuario {
             System.out.println("Administrador ya creado");
             return;
         }
-        Role adminRole = Role.ADMINISTRATOR;
+        Role adminRole = Role.ADMINISTRADOR;
         Usuario admin = new Usuario("admin","admin","admin@admin","admin123",adminRole);
         try{
             usuarioService.crearUsuario(admin);
@@ -38,7 +38,7 @@ public class  CrearUsuario {
             System.out.println("Usuario ya creado");
             return;
         }
-        Role userRole = Role.CUSTOMER;
+        Role userRole = Role.USUARIO;
         Usuario user = new Usuario("user","user","user@user","user123",userRole);
         try{
             usuarioService.crearUsuario(user);

@@ -5,21 +5,21 @@ import java.util.List;
 
 public enum Role {
 
-    CUSTOMER(Arrays.asList(Permission.READ_ALL_PRODUCTS)),
-    ADMINISTRATOR(Arrays.asList(Permission.SAVE_ONE_PRODUCT,Permission.READ_ALL_PRODUCTS));
+    USUARIO(Arrays.asList(Permission.LEER_TODOS)),
+    ADMINISTRADOR(Arrays.asList(Permission.ACTUALIZAR,Permission.GUARDAR,Permission.LEER_TODOS));
 
-    private List<Permission> permissions;
+    private List<Permission> permisos;
 
-    Role(List<Permission> permissions) {
-        this.permissions = permissions;
+    Role(List<Permission> permisos) {
+        this.permisos = permisos;
     }
 
-    public List<Permission> getPermissions() {
-        return permissions;
+    public List<Permission> getpermisos() {
+        return permisos;
     }
 
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
+    public void setpermisos(List<Permission> permisos) {
+        this.permisos = permisos;
     }
 
 }

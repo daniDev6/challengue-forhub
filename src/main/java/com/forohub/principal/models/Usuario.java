@@ -106,8 +106,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = role.getPermissions().stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+        List<GrantedAuthority> authorities = role.getpermisos().stream()
+                .map(permisos -> new SimpleGrantedAuthority(permisos.name()))
                 .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
         return authorities;
